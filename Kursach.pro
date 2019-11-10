@@ -16,15 +16,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    instruction.cpp \
     main.cpp \
     mainwindow.cpp \
     moneyclass.cpp
 
 HEADERS += \
+    instruction.h \
     mainwindow.h \
     moneyclass.h
 
 FORMS += \
+    instruction.ui \
     mainwindow.ui
 
 # Default rules for deployment.

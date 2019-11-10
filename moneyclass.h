@@ -4,11 +4,12 @@
 #include <iostream>
 #include<string>
 
+
 #endif // MONEYCLASS_H
 
 using namespace std;
 
-class MoneyClass //������� �����
+class MoneyClass//базовый класс
 {
 public:
     double price;
@@ -16,21 +17,20 @@ public:
     MoneyClass(double price) { this->price = price ;}
 };
 
-class IncomeMoney : public MoneyClass //�����-��������� �������� �� ����������� �����
+class IncomeMoney : public MoneyClass //класс-наслденик для прибыли
 {
 public:
     string IncomeCategory;
-
     IncomeMoney(){}
     IncomeMoney(string Category,double cost)
     {
         (MoneyClass(cost));
         this->IncomeCategory = Category;
     }
-    void ShowIncomeMoney();
+
 };
 
-class SpendingMoney : public MoneyClass //�����-��������� �������� �� �������
+class SpendingMoney : public MoneyClass //класс-наследник для затрат
 {
 public:
     string CostCategory;
@@ -41,20 +41,17 @@ public:
         (MoneyClass(cost));
         this->CostCategory = Category;
     }
-    void ShowSpendingMoney();
 };
 
-class FutureSpendingMoney : public SpendingMoney
+class FutureSpendingMoney : public SpendingMoney //класс-наследник для подсчёта будущих затрат
 {
 public:
-    int amount;
     double TotalFutureSpending;
 
-    FutureSpendingMoney(){TotalFutureSpending = 0; amount = 0;}
-    int SumFutureSpending();
+    FutureSpendingMoney(){TotalFutureSpending = 0;}
 };
 
-class TotalRevenue : public IncomeMoney //����� ����� �����
+class TotalRevenue : public MoneyClass //класс-наследник для подсчёта прибыли
 {
 public:
     double TotalIncome;
@@ -63,11 +60,11 @@ public:
     {
         TotalIncome = 0;
     }
-    int SumIncomeMoney();
-    void ShowListIncome(IncomeMoney *arr,int size);
+    void getSumIncome(double income);
+
 };
 
-class TotalCosts : public SpendingMoney //����� ����� ��������
+class TotalCosts : public SpendingMoney //класс-наследник для подсчёта затрат
 {
 public:
     double TotalSpending;
@@ -76,27 +73,23 @@ public:
     {
         TotalSpending = 0;
     }
-    int SumSpendingMoney();
+    void getSumSpending(double spending);
 };
 
-class RestOfMoney : virtual public TotalCosts,virtual public TotalRevenue
+//класс-наследник для подсчёта остатка
+class RestOfMoney : virtual public TotalCosts,virtual public TotalRevenue,virtual public FutureSpendingMoney
 {
 public:
     double Rest;
-    double income;
-    double spend;
-    double futureSpend;
 
-    RestOfMoney(){Rest = 0;income = 0;spend = 0; futureSpend = 0;}
+    RestOfMoney(){Rest = 0;}
     RestOfMoney(double income,double spend,double futureSpending)
     {
-        this->income = income;
-        this->spend = spend;
-        this->futureSpend = futureSpending;
+        this->TotalIncome = income;
+        this->TotalSpending = spend;
+        this->TotalFutureSpending = futureSpending;
     }
 
     double SumRest();
-
-
 
 };

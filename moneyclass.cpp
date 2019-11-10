@@ -4,27 +4,18 @@
 
 using namespace std;
 
-
-void IncomeMoney::ShowIncomeMoney()
+void TotalRevenue::getSumIncome(double income)
 {
-    cout << this->IncomeCategory << " " << this->price << " ���"<< endl;
+    this->TotalIncome += income;
 }
 
-void TotalRevenue::ShowListIncome(IncomeMoney *arr, int size)
+void TotalCosts::getSumSpending(double spending)
 {
-    for(int i = 0;i < size; i++)
-    {
-        cout << arr[i].IncomeCategory << " " << arr[i].price <<" ���"<< endl;
-    }
-}
-
-void SpendingMoney::ShowSpendingMoney()
-{
-    cout << this->CostCategory << " " << this->price <<" ���" << endl;
+    this->TotalSpending += spending;
 }
 
 double RestOfMoney::SumRest()
 {
-    this->Rest = income + spend + futureSpend;
+    this->Rest =this->TotalIncome+this->TotalSpending+this->TotalFutureSpending;
     return this->Rest;
 }

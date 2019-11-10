@@ -1,0 +1,6 @@
+If you need to build this programm, firstly you need to create in filder with this project a folder with the name "DataFiles".
+Secondly copy Qt5Gui.dll,Qt5Widgets.dll,Qt5Core.dll.
+The third step is building this project lake a release version.
+
+Thank u for using my soft!
+Created by Shulinin Alexey.

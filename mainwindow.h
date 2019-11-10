@@ -4,6 +4,7 @@
 
 #include <QMainWindow>
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -15,7 +16,6 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
 
 private slots:
 
@@ -50,6 +50,14 @@ private slots:
     void on_add_To_MainList_clicked();
 
     void on_transferAll_clicked();
+
+    void on_Exit_clicked();
+
+    void checkSpending();
+
+    void on_Instruction_triggered();
+
+    void on_DeletePlan_clicked();
 
 private:
     Ui::MainWindow *ui;
