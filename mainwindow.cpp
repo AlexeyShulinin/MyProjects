@@ -458,7 +458,6 @@ void MainWindow::on_DeletePlan_clicked()
     TotalPrice = price[price.count()-2].toDouble();//Берём среднюю часть - это наша сумма
 
     ui->label_TotalWithFuture->setNum(ui->label_TotalWithFuture->text().toDouble() - TotalPrice);
-    ui->label_Total->setNum(ui->label_Total->text().toDouble() - TotalPrice);
     ui->label_FutureSpending->setNum(ui->label_FutureSpending->text().toDouble() - TotalPrice);
     MainWindow::checkSpending();
 
