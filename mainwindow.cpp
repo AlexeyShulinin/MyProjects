@@ -312,6 +312,7 @@ void MainWindow::DownloadFromFuturePlans(QString Path)
         price = text.split(QRegExp("\\s+"),QString::SkipEmptyParts);
         plan.TotalFutureSpending =  price[price.count()-2].toDouble();
         ui->label_FutureSpending->setNum(ui->label_FutureSpending->text().toDouble()+plan.TotalFutureSpending);
+        ui->label_TotalWithFuture->setNum(ui->label_Total->text().toDouble() + ui->label_FutureSpending->text().toDouble());
     }
     MainWindow::checkSpending();
     File.close();
