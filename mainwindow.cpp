@@ -142,7 +142,7 @@ void MainWindow::on_pushButton_Add_clicked()
     Total.TotalIncome = Income.TotalIncome; Total.TotalSpending = Spending.TotalSpending;
     Total.SumRest();
     ui->label_Total->setNum(Total.Rest);
-    ui->label_TotalWithFuture->setNum(Total.Rest - ui->label_FutureSpending->text().toDouble());
+    ui->label_TotalWithFuture->setNum(Total.Rest + ui->label_FutureSpending->text().toDouble());
 
     MainWindow::checkSpending();
 
