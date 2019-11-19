@@ -98,7 +98,7 @@ void MainWindow::DownloadFromFile(QString Path)
     }
 
     ui->label_Total->setNum(rest.SumRest());
-    ui->label_TotalWithFuture->setNum(rest.SumRest());
+    ui->label_TotalWithFuture->setNum(ui->label_Total->text().toDouble()+ui->label_FutureSpending->text().toDouble());
     MainWindow::checkSpending();
     File.close();
 
@@ -370,13 +370,11 @@ void MainWindow::transferToMainList(QString text)
     {
         spending.getSumSpending(TotalPrice);
         ui->label_Spending->setNum(spending.TotalSpending);
-        //ui->label_Spending->setNum( spending.TotalSpending + TotalPrice);
     }
     else
     {
         income.getSumIncome(TotalPrice);
         ui->label_Income->setNum(income.TotalIncome);
-        //ui->label_Income->setNum( income.TotalIncome + TotalPrice );
     }
     ui->label_Total->setNum( rest.Rest + TotalPrice );
     ui->label_FutureSpending->setNum(ui->label_FutureSpending->text().toDouble()-TotalPrice);
@@ -389,9 +387,10 @@ void MainWindow::on_add_To_MainList_clicked()
     QVector<QString> list(ui->listWidget_Plans->count());
     QString text;
 
-    if(!ui->listWidget_Plans->currentItem()) return;
-    for(int i=0,j=0;i<ui->listWidget_Plans->count();i++)
+    if(ui->listWidget_Plans->currentItem())
     {
+        for(int i=0,j=0;i<ui->listWidget_Plans->count();i++)
+        {
         if(ui->listWidget_Plans->item(i)->text() == ui->listWidget_Plans->currentItem()->text())
         {
             text = ui->listWidget_Plans->item(i)->text();
@@ -401,13 +400,19 @@ void MainWindow::on_add_To_MainList_clicked()
 
         list[j] = ui->listWidget_Plans->item(i)->text();
         j++;
-    }
-    ui->listWidget_Plans->clear();
-    for(int i = 0;i <= (list.count()-2);i++)
-    {
+        }
+        ui->listWidget_Plans->clear();
+        for(int i = 0;i <= (list.count()-2);i++)
+        {
         ui->listWidget_Plans->addItem(list[i]);
+        }
+        ui->statusbar->showMessage("Категория перенесена");
     }
-    ui->statusbar->showMessage("Категория перенесена");
+    else
+    {
+        QMessageBox::information(this,"Ошибка","Список пуст или вы не выбрали элемент!"
+                                               "\nЕсли список не пустой, выберите элемент,после чего нажмите Перенести");
+    }
 }
 
 void MainWindow::on_transferAll_clicked()
@@ -415,14 +420,20 @@ void MainWindow::on_transferAll_clicked()
     QVector<QString> list(ui->listWidget_Plans->count());
     QString text;
 
-    if(ui->listWidget_Plans->count() == 0) return;
-    for(int i=0;i<ui->listWidget_Plans->count();i++)
+    if(ui->listWidget_Plans->count() != 0)
     {
-        text = list[i] = ui->listWidget_Plans->item(i)->text();
-        MainWindow::transferToMainList(text);
+        for(int i=0;i<ui->listWidget_Plans->count();i++)
+        {
+            text = list[i] = ui->listWidget_Plans->item(i)->text();
+            MainWindow::transferToMainList(text);
+        }
+        ui->listWidget_Plans->clear();
+        ui->statusbar->showMessage("Все категории перенесены");
     }
-    ui->listWidget_Plans->clear();
-    ui->statusbar->showMessage("Все категории перенесены");
+    else
+    {
+        QMessageBox::information(this,"Ошибка","Список пуст!");
+    }
 }
 
 void MainWindow::on_Exit_clicked()
@@ -440,34 +451,60 @@ void MainWindow::on_Instruction_triggered()
 
 void MainWindow::on_DeletePlan_clicked()
 {
-    QVector<QString> list(ui->listWidget_Plans->count()-1);
-    QString text;
-    QStringList price;
-    double TotalPrice;
 
-    int i = 0,j=0;
-
-    if(ui->listWidget_Plans->count()==0) return;
-    for(;i <= list.count();i++)
+    if(ui->listWidget_Plans->count()!=0 && ui->listWidget_Plans->currentItem())
     {
-        if(ui->listWidget_Plans->item(i)->text() == ui->listWidget_Plans->currentItem()->text()){continue;}
-        list[j] = ui->listWidget_Plans->item(i)->text();
-        j++;
+        QVector<QString> list(ui->listWidget_Plans->count()-1);
+        QString text;
+        QStringList price;
+        double TotalPrice;
+
+        int i = 0,j=0;
+
+        for(;i <= list.count();i++)
+        {
+            if(ui->listWidget_Plans->item(i)->text() == ui->listWidget_Plans->currentItem()->text()){continue;}
+            list[j] = ui->listWidget_Plans->item(i)->text();
+            j++;
+        }
+        text = ui->listWidget_Plans->currentItem()->text();
+        price = text.split(QRegExp("\\s+"),QString::SkipEmptyParts);// делим на части;
+        TotalPrice = price[price.count()-2].toDouble();//Берём среднюю часть - это наша сумма
+
+        ui->label_TotalWithFuture->setNum(ui->label_TotalWithFuture->text().toDouble() - TotalPrice);
+        ui->label_FutureSpending->setNum(ui->label_FutureSpending->text().toDouble() - TotalPrice);
+        MainWindow::checkSpending();
+
+        ui->listWidget_Plans->clear();
+        j = 0;
+        while(j < list.count())
+        {
+            ui->listWidget_Plans->addItem(list[j]);
+            j++;
+        }
+        ui->statusbar->showMessage("Из плана удалена категория");
     }
-    text = ui->listWidget_Plans->currentItem()->text();
-    price = text.split(QRegExp("\\s+"),QString::SkipEmptyParts);// делим на части;
-    TotalPrice = price[price.count()-2].toDouble();//Берём среднюю часть - это наша сумма
+    else
+    {
+        QMessageBox::information(this,"Ошибка","Список пуст или вы не выбрали элемент для удаления!"
+                                               "\nЕсли список не пустой, выберите элемент для удаления,после чего нажмите Удалить");
+    }
+}
 
-    ui->label_TotalWithFuture->setNum(ui->label_TotalWithFuture->text().toDouble() - TotalPrice);
-    ui->label_FutureSpending->setNum(ui->label_FutureSpending->text().toDouble() - TotalPrice);
-    MainWindow::checkSpending();
+void MainWindow::on_clear_ListWirdget_clicked()
+{
+    ui->listWidget->clear();
+    ui->label_Total->setNum(0);
+    ui->label_Income->setNum(0);
+    ui->label_Spending->setNum(0);
+    ui->label_TotalWithFuture->setNum(ui->label_FutureSpending->text().toDouble());
+    ui->statusbar->showMessage("Список доходов и расходов очищен!");
+}
 
+void MainWindow::on_clear_list_Plans_clicked()
+{
     ui->listWidget_Plans->clear();
-    j = 0;
-    while(j < list.count())
-    {
-        ui->listWidget_Plans->addItem(list[j]);
-        j++;
-    }
-    ui->statusbar->showMessage("Из плана удалена категория");
+    ui->label_FutureSpending->setNum(0);
+    ui->label_TotalWithFuture->setNum(ui->label_Total->text().toDouble());
+    ui->statusbar->showMessage("Список планов очищен!");
 }
