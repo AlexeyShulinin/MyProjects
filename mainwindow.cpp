@@ -3,6 +3,7 @@
 #include "instruction.h"
 #include "ui_mainwindow.h"
 #include "moneyclass.h"
+#include "exception.h"
 #include <QFile>
 #include <QDir>
 #include <QTextStream>
@@ -51,10 +52,13 @@ void MainWindow::DownloadFromFile(QString Path)
 {
     QFile File;
     File.setFileName(Path);
-
-    if(!File.open(QFile::ReadOnly | QFile::Text))
+    try
     {
-        QMessageBox::information(this,"Error","Файл не открыт!");
+        Exception::isOpenCorrect(File);
+    }
+    catch(exception &ex)
+    {
+        QMessageBox::information(this,"Error",ex.what());
         return;
     }
 
@@ -222,11 +226,13 @@ void MainWindow::SaveToFile(QString Path)
 {
     QFile File;
     File.setFileName(Path);
-
-    if(!File.open(QFile::WriteOnly | QFile::Text))
+    try
     {
-        QMessageBox::information(this,"Error","Файл не открыт!");
-        return;
+        Exception::isSaved(File);
+    }
+    catch(exception &ex)
+    {
+        QMessageBox::information(this,"Error",ex.what());
     }
 
     QTextStream stream(&File); //Направляем поток на данный файл
@@ -238,6 +244,8 @@ void MainWindow::SaveToFile(QString Path)
         stream.operator<<(buf[i])<<endl;
     }
     File.close();
+
+
 }
 
 void MainWindow::on_Save_Current_triggered()
@@ -289,9 +297,13 @@ void MainWindow::DownloadFromFuturePlans(QString Path)
     FutureSpendingMoney plan;
     File.setFileName(Path);
 
-    if(!File.open(QFile::ReadOnly | QFile::Text))
+    try
     {
-        QMessageBox::information(this,"Error","Файл не открыт!");
+        Exception::isOpenCorrect(File);
+    }
+    catch(exception &ex)
+    {
+        QMessageBox::information(this,"Error",ex.what());
         return;
     }
 

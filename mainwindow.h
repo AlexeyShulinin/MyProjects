@@ -3,6 +3,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "exception.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -17,6 +18,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    friend class Exception;
 private slots:
 
     void on_pushButton_Add_clicked();
@@ -58,6 +60,10 @@ private slots:
     void on_Instruction_triggered();
 
     void on_DeletePlan_clicked();
+
+    void on_clear_ListWirdget_clicked();
+
+    void on_clear_list_Plans_clicked();
 
 private:
     Ui::MainWindow *ui;
