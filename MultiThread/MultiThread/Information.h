@@ -10,6 +10,8 @@ class Information
 {
 private:
 
+	string name;
+	int group, amount_of_books;
 
 public:
 	Information(const string file_name);
@@ -18,12 +20,10 @@ public:
 
 	ifstream lib_info;
 	string file_name;
-	string name;
-	int group, amount_of_books;
-
 
 	void SearchPerson(const string name_of_person);
-
+	void FileOpened();
+	bool CheckFile();
 	
 };
 
