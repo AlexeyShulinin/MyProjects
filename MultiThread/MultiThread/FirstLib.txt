@@ -1,0 +1,15 @@
+Andrew 850504 4
+Aleksey 850504 0
+Oleg 850501 2
+Nik 850502 4
+Joseph 850503 10
+Nikita 850506 11
+Natasha 850506 0
+Maxim 850501 0
+Michael 850501 13
+Pasha 850502 18
+Vova 850504 4
+Yulia 850506 4
+Katja 850507 2
+Roma 850506 2
+Lisa 850502 0
